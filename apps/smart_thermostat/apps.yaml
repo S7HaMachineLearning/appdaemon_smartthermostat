@@ -1,0 +1,44 @@
+smartThermostat:
+  module: smartThermostat
+  class: smartThermostat
+  dependencies: globals
+  evening_on: input_datetime.smart_thermosat_evening
+  sleep_on: input_datetime.smart_thermosat_sleep
+  morning_on_week: input_datetime.smart_thermosat_morning_on_week
+  morning_on_weekend: input_datetime.smart_thermosat_morning_on_weekend
+  input_select: input_select.house_mode
+  # home: input_boolean.away_mode
+  # off_temp: '15'
+  # on_temp: input_number.smart_thermostat_on_temp
+  # conf_temp: '20'
+  thermostat: climate.toon_thermostat
+  switch: input_boolean.smartthermostat
+addEntitys:
+  module: addEntitys
+  class: addEntitys
+  dependencies:
+    - smartThermostat
+  # entitys: input_datetime.smart_thermosat_morning_on_weekend, input_datetime.smart_thermosat_evening, input_datetime.smart_thermosat_sleep, input_datetime.smart_thermosat_morning_on_week
+  # evening_on: input_datetime.smart_thermosat_evening
+set_time:
+  module: set_time
+  class: set_time
+  evening_on: input_datetime.smart_thermosat_evening
+  sleep_on: input_datetime.smart_thermosat_sleep
+  morning_on_week: input_datetime.smart_thermosat_morning_on_week
+  morning_on_weekend: input_datetime.smart_thermosat_morning_on_weekend
+  thermostat: climate.toon_thermostat
+  input_select: input_select.house_mode
+  dependencies:
+    - smartThermostat
+set_temp:
+  module: set_time
+  class: set_time
+  evening_on: input_datetime.smart_thermosat_evening
+  sleep_on: input_datetime.smart_thermosat_sleep
+  morning_on_week: input_datetime.smart_thermosat_morning_on_week
+  morning_on_weekend: input_datetime.smart_thermosat_morning_on_weekend
+  thermostat: climate.toon_thermostat
+  input_select: input_select.house_mode
+  dependencies:
+    - smartThermostat
