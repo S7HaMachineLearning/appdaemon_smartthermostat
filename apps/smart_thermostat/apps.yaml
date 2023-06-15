@@ -1,6 +1,6 @@
-smartThermostat:
-  module: smartThermostat
-  class: smartThermostat
+smart_thermostat:
+  module: smart_thermostat
+  class: smart_thermostat
   dependencies: globals
   evening_on: input_datetime.smart_thermosat_evening
   sleep_on: input_datetime.smart_thermosat_sleep
@@ -30,7 +30,7 @@ set_time:
   thermostat: climate.toon_thermostat
   input_select: input_select.house_mode
   dependencies:
-    - smartThermostat
+    - smart_thermostat
 set_temp:
   module: set_time
   class: set_time
@@ -41,4 +41,4 @@ set_temp:
   thermostat: climate.toon_thermostat
   input_select: input_select.house_mode
   dependencies:
-    - smartThermostat
+    - smart_thermostat

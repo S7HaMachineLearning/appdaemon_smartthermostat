@@ -28,7 +28,7 @@ import json as json
 # input_select = Name of input_select to monitor followed by comma separated list of values for which heating should be ON
 
 
-class smartThermostat(hass.Hass):
+class smart_thermostat(hass.Hass):
     def initialize(self):
         # Test
 
