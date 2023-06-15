@@ -1,3 +1,5 @@
+# This workflow wil run a lint test on the python code
+
 name: Pylint
 
 on: [push]
