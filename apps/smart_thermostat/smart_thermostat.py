@@ -1,9 +1,6 @@
 """smart thermostat app for HACS."""
 
 import hassapi as hass
-from datetime import datetime, timedelta
-import adbase as ad
-import json as json
 
 
 # App to manage heating:
