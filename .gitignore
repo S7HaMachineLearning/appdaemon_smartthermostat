@@ -2,3 +2,11 @@
 venv/
 
 .vscode/
+
+apps/smart_thermostat/__pycache__/
+
+tests/__pycache__/
+
+venv-3.7/
+venv_old/
+venv/
