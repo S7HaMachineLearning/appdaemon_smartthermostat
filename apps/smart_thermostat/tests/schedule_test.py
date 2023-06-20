@@ -1,0 +1,1 @@
+from apps.smart_thermostat.schedule import schedule
