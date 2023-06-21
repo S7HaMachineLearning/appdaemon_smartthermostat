@@ -1,5 +1,9 @@
 name: Pylint & Unittest
 
+env:
+  HASS_URL: ""
+  HASS_TOKEN: ""
+
 on: [push]
 
 jobs:
