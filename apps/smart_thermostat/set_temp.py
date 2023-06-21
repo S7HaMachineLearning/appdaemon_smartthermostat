@@ -57,7 +57,7 @@ class set_temp(hass.Hass): # pylint: disable=invalid-name
             # round to nearest .5 or .0
             new_temp = round(attribute * 2) / 2
         else:
-            numbers = [float(number) for number in attribute]
+            numbers = [float(number) for number in temps]
             average = sum(numbers) / len(numbers)
             # round to nearest .5 or .0
             new_temp = round(average * 2) / 2
