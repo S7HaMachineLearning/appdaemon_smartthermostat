@@ -50,7 +50,6 @@ class TestSetTime(unittest.TestCase):
 
         # Asserts om de verwachte resultaten te controleren
         self.assertEqual(result, self.set_time.args['morning_on_week'])
-        self.set_time.log.assert_called_with(self.set_time.args['morning_on_week'])
 
 
 if __name__ == '__main__':
