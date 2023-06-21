@@ -1,8 +1,8 @@
 name: Pylint & Unittest
 
 env:
-  HASS_URL: ""
-  HASS_TOKEN: ""
+  HASS_URL: "https://homeassistant:8123"
+  HASS_TOKEN: " "
 
 on: [push]
 
