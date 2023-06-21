@@ -37,7 +37,7 @@ class set_time(hass.Hass): # pylint: disable=invalid-name
     def set_sleep_time(self, entity, attribute, old, new, kwargs): # pylint: disable=too-many-arguments, unused-argument
         """this function will set the new time"""	
         if new == 'sleep' and self.get_state(self.args["smart_time_switch"]) == "on":
-            self.log("detected manual sleep mode activated")
+            self.log("detected manual sleepmode override")
             new_time = self.get_new_time(self.args['sleep_on'])
             self.sleep = self.get_entity(self.args['sleep_on']) # pylint: disable=attribute-defined-outside-init
             self.sleep.call_service(
@@ -51,10 +51,10 @@ class set_time(hass.Hass): # pylint: disable=invalid-name
         if new != old and self.get_state(self.args["smart_time_switch"]) == "on":
             time = datetime.now()
             time = time.strftime('%H:%M:%S')
-            self.log("detected manual daytime mode activated")
             entity_id = self.get_housemode()
             entity = self.compaire_temp(housemode= entity_id)
             if entity != "":
+                self.log("detected manual housemode override")
                 new_time = self.get_new_time(entity_id)
                 self.entity_id = self.get_entity(entity_id) # pylint: disable=attribute-defined-outside-init
                 self.entity_id.call_service(
@@ -72,7 +72,6 @@ class set_time(hass.Hass): # pylint: disable=invalid-name
         entity = ""
 
         if temperature == morning_temp and housemode != self.args['morning_on_week']:
-            self.log("test")
             entity = self.args['morning_on_week']
         if temperature == morning_temp and housemode != self.args['morning_on_weekend']:
             entity = self.args['morning_on_weekend']
@@ -80,7 +79,6 @@ class set_time(hass.Hass): # pylint: disable=invalid-name
             entity = self.args['sleep_on']
         if temperature == evening_temp and housemode != self.args['evening_on']:
             entity = self.args['evening_on']
-        self.log(entity)
         return entity
 
     def get_housemode(self):

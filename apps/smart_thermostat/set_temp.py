@@ -32,7 +32,7 @@ class set_temp(hass.Hass): # pylint: disable=invalid-name
             temp = float(self.get_state(self.args['thermostat'], attribute='temperature')) # pylint: disable=E1123
             # minimum temperature is 10 degrees
             if temp != pref and temp >= 10:
-                self.log("change detected")
+                self.log("Manual temperature change detected")
                 self.set_new_temp(entity= self.args["thermostat"], attribute = temp )
 
     def set_new_temp(self, entity, attribute):
