@@ -38,8 +38,6 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-        HASS_URL: ${{ secrets.HASS_URL }}
-        HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
