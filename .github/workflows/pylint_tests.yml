@@ -48,10 +48,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-#     - name: create env
-#       run: |
-#         echo HASS_URL=${{ secrets.HASS_URL }} >> .env
-#         echo HASS_TOKEN=${{ secrets.HASS_TOKEN }} >> .env
     - name: Run unit tests
       run: |
         python -m unittest discover -s tests/ -p "test_*.py"
