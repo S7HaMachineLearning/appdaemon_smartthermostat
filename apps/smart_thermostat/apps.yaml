@@ -21,6 +21,9 @@ set_time:
   sleep_on: input_datetime.smart_thermosat_sleep
   morning_on_week: input_datetime.smart_thermosat_morning_on_week
   morning_on_weekend: input_datetime.smart_thermosat_morning_on_weekend
+  morning_temp: input_number.smart_thermostat_morning_temp
+  sleep_temp: input_number.smart_thermostat_sleep_temp
+  evening_temp: input_number.smart_thermostat_evening_temp 
   thermostat: climate.toon_thermostat
   input_select: input_select.smart_thermostat_house_mode
   smart_time_switch: input_boolean.smart_thermostat_time_switch
