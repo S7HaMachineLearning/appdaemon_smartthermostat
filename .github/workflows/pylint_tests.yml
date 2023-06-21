@@ -1,7 +1,8 @@
 name: Pylint & Unittest
 
 env:
-  HASS_URL: 'https://n4a5frgwt2nqye2587bb8tmui5dvz4x1.ui.nabu.casa/'
+  environment: HASS
+  HASS_URL: ${{ secrets.HASS_URL }}
   HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
 
 on: [push]
