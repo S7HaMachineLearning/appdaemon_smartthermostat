@@ -74,7 +74,7 @@ class schedule(hass.Hass): # pylint: disable=invalid-name
 
     def sleep(self, kwargs): # pylint: disable=unused-argument
         """set sleep temperature based on smart schedule"""
-        self.log("Evening heat check")
+        self.log("Sleep heat check")
         # set state to input select
         self.select_option(self.args["input_select"], "sleep")
         if self.anyone_home() and self.get_state(self.args["switch"]) == "on":
