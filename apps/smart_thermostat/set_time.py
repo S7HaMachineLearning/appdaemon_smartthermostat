@@ -4,7 +4,19 @@ from datetime import datetime
 import hassapi as hass
 
 class set_time(hass.Hass): # pylint: disable=invalid-name
-    """this app will make a schedule for the thermostat based on the user's behavior"""
+    """
+    this app will make a schedule for the thermostat based on the user's behavior
+    
+    args:
+
+    evening_on: input_datetime.smart_thermosat_evening
+    sleep_on: input_datetime.smart_thermosat_sleep
+    morning_on_week: input_datetime.smart_thermosat_morning_on_week
+    morning_on_weekend: input_datetime.smart_thermosat_morning_on_weekend
+    thermostat: climate.toon_thermostat
+    input_select: input_select.smart_thermostat_house_mode
+    """
+
     def initialize(self):
         """ 
         this function will initialize the app
@@ -12,9 +24,10 @@ class set_time(hass.Hass): # pylint: disable=invalid-name
         start listening to changes in the thermostat temperature
 
         """
-        # Subscribe to thermostat preset changes
+        # Subscribe to thermostat preset changes for sleep mode
         self.listen_state(self.set_sleep_time, self.args["thermostat"], attribute="preset_mode")
 
+        # Subscribe to thermostat temperature changes for new daytime
         self.listen_state(self.set_new_daytime, self.args["thermostat"], attribute="temperature")
 
     def set_sleep_time(self, entity, attribute, old, new, kwargs): # pylint: disable=too-many-arguments, unused-argument
@@ -47,7 +60,7 @@ class set_time(hass.Hass): # pylint: disable=invalid-name
 
     def get_housemode(self):
         """this function will get the housemode"""
-        mode = self.get_state(self.args['input_select'])
+        mode = self.get_entity_state(entity='input_select')
 
         if mode == "morning_weekend":
             entity_id = self.args['morning_on_weekend']
@@ -62,7 +75,7 @@ class set_time(hass.Hass): # pylint: disable=invalid-name
     def get_new_time (self, entity):
         """this function will get the new time"""
         timestamp = []
-        history = self.get_history(entity_id = entity, days = 14)
+        history = self.get_entity_history(entity = entity, days = 14)
 
         for item in history[0]:
             state = item['state']
@@ -76,3 +89,11 @@ class set_time(hass.Hass): # pylint: disable=invalid-name
 
         average_time = f'{hours:02d}:{minutes:02d}:{seconds:02d}'
         return average_time
+
+    def get_entity_state(self, entity):
+        """this function will get the entity state"""
+        return self.get_state(self.args[entity])
+
+    def get_entity_history(self, entity, days):
+        """this function will get the entity history"""
+        return self.get_history(entity_id = entity, days = days)

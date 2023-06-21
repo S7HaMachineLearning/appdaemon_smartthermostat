@@ -5,16 +5,16 @@ import hassapi as hass
 class schedule(hass.Hass): # pylint: disable=invalid-name
     """
     Args:
-    morning_on_week (str): Time schedule for weekdays
-    morning_on_weekend (str): Time schedule for weekends
-    evening_on (str): Time schedule for evenings
-    sleep_on (str): Time schedule for sleep
-    switch (bool): Input boolean to activate and deactivate smartThermostat
-    thermostat (str): The termostat to manage
-    off_temp (float): Temperature to set thermostat to "off"
-    on_temp (float): Temperature to set thermostat to "on"
-    conf_temp (float): Temperature to set thermostat to comfort
-    input_select (str): entity whit home modes
+    morning_on_week: Time schedule for weekdays
+    morning_on_weekend: Time schedule for weekends
+    evening_on: Time schedule for evenings
+    sleep_on: Time schedule for sleep
+    switch: Input boolean to activate and deactivate smartThermostat
+    thermostat: The termostat to manage
+    off_temp: Temperature to set thermostat to "off"
+    on_temp: Temperature to set thermostat to "on"
+    conf_temp: Temperature to set thermostat to comfort
+    input_select: entity whit home modes
 
     App to manage heating:
     Turn on at different times in morning for weekdays and weekend, only if someone present

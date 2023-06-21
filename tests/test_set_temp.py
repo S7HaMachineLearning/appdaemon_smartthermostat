@@ -1,51 +1,40 @@
 from unittest.mock import MagicMock
-from unittest import mock
-from apps.smart_thermostat.set_temp import set_temp
-from appdaemon_testing.pytest import automation_fixture
+import unittest
 import sys
 sys.path.append('..')
+from apps.smart_thermostat.set_temp import set_temp
 
 
-# def test_callbacks_are_registered(hass_driver, set_temp: set_temp):
-#     run_every = hass_driver.get_mock("run_every")
-#     run_every.assert_called_once_with(
-#         set_temp.check_change, "now+5", 5 * 60)
+class TestSetTemp(unittest.TestCase):
+    """setup test"""
+    def setUp(self):
+        print('setup')
+        self.set_temp = set_temp()
+        self.set_temp.get_entity_state = MagicMock(return_value='morning_weekend')
+        # 3 states in history 10.0, 15.0, 16.0. 
+        self.set_temp.get_entity_history = MagicMock(return_value= [[{'entity_id': 'input_number.smart_thermostat_sleep_temp', 'state': '10.0', 'attributes': {'initial': None, 'unit_of_measurement': '��C', 'friendly_name': 'smart_thermostat_sleep_temp'}, 'last_changed': '2023-06-15T15:16:47.220532+00:00', 'last_updated': '2023-06-15T15:16:47.220532+00:00'}, {'entity_id': 'input_number.smart_thermostat_sleep_temp', 'state': '15.0', 'attributes': {'initial': None, 'unit_of_measurement': '��C', 'friendly_name': 'smart_thermostat_sleep_temp'}, 'last_changed': '2023-06-15T15:52:38.411697+00:00', 'last_updated': '2023-06-15T15:52:38.411697+00:00'}, {'entity_id': 'input_number.smart_thermostat_sleep_temp', 'state': '16.0', 'attributes': {'initial': None, 'unit_of_measurement': '��C', 'friendly_name': 'smart_thermostat_sleep_temp'}, 'last_changed': '2023-06-16T06:39:31.923175+00:00', 'last_updated': '2023-06-16T06:39:31.923175+00:00'}]])
+        self.set_temp.args = {
+            'input_select': 'input_select.house_mode',
+            'morning_temp': 'input_number.smart_thermostat_morning_temp',
+            'sleep_temp': 'input_number.smart_thermostat_sleep_temp',
+            'evening_temp': 'input_number.smart_thermostat_evening_temp',
+        }
 
-# def test_set_temp(set_temp_instance):
-#     """Test the set_temp app."""
-#     set_temp_instance.initialize()
+    def test_get_housemode_morning_weekend(self):
+        '''testing housemode morning weekend sould be correct'''
+        expected_entity_id = 'input_number.smart_thermostat_morning_temp'
+        entity_id = self.set_temp.get_housemode()
+        self.assertEqual(entity_id, expected_entity_id)
 
-#     # set_temp_instance.args["thermostat"] = "climate.toon_thermostat"
-#     # set_temp_instance.args["morning_temp"] = "input_number.smart_thermostat_morning_temp"
-#     # set_temp_instance.args["sleep_temp"] = "input_number.smart_thermostat_sleep_temp"
-#     # set_temp_instance.args["evening_temp"] = "input_number.smart_thermostat_evening_temp"
-#     # set_temp_instance.args["input_select"] = "input_select.smart_thermostat_house_mode"
-
-#     # Simuleer een verandering in temperatuur
-#     set_temp_instance.set_new_temp(entity="thermostat", attribute=20)
-
-#     # Controleer of de nieuwe temperatuur correct is ingesteld
-#     new_temp = set_temp_instance.get_state("thermostat")
-#     assert new_temp == 20
-
-#     # Simuleer onvoldoende gegevens voor het berekenen van de nieuwe temperatuur
-#     set_temp_instance.get_history = lambda entity_id, days: []
-#     set_temp_instance.set_new_temp(entity="thermostat", attribute=25)
-
-#     # Controleer of de nieuwe temperatuur correct is afgerond naar .5 of .0
-#     new_temp = set_temp_instance.get_state("thermostat")
-# #     assert new_temp == 25.0 or new_temp == 25.5
+    def test_geting_new_time_based_on_hystory(self):
+        '''testing geting new time based on hystory'''
+        # this temperture sould come out as a result after calculation and rounding
+        expected_new_temp = 17.0
+        # this is the temperture that is set in the thermnostat
+        new_temp = self.set_temp.get_new_temp('input_number.smart_thermostat_sleep_temp', 17.1)
+        self.assertEqual(new_temp, expected_new_temp)
 
 
-# @automation_fixture(
-#     set_temp,
-#     args={
-#         "thermostat": "climate.toon_thermostat",
-#         "morning_temp": "input_number.smart_thermostat_morning_temp",
-#         "sleep_temp": "input_number.smart_thermostat_sleep_temp",
-#         "evening_temp": "input_number.smart_thermostat_evening_temp",
-#         "input_select": "input_select.smart_thermostat_house_mode"
-#     },
-# )
-# def test_set_temp() -> set_temp:
-#     pass
+if __name__ == '__main__':
+    unittest.main()
+    
