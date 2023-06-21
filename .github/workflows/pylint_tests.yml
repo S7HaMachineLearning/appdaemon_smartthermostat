@@ -41,12 +41,12 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-        HASS_URL: $HASS_URL
-        HASS_TOKE: $HASS_TOKEN
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        $env:HASS_URL=$HASS_URL
+        $env:HASS_TOKEN=$HASS_TOKEN
     - name: Run unit tests
       run: |
         python -m unittest discover -s tests/ -p "test_*.py"
