@@ -1,25 +1,19 @@
-smart_thermostat:
-  module: smart_thermostat
-  class: smart_thermostat
-  dependencies: globals
+schedule:
+  module: schedule
+  class: schedule
   evening_on: input_datetime.smart_thermosat_evening
   sleep_on: input_datetime.smart_thermosat_sleep
   morning_on_week: input_datetime.smart_thermosat_morning_on_week
   morning_on_weekend: input_datetime.smart_thermosat_morning_on_weekend
-  input_select: input_select.house_mode
-  # home: input_boolean.away_mode
-  # off_temp: '15'
-  # on_temp: input_number.smart_thermostat_on_temp
-  # conf_temp: '20'
+  input_select: input_select.smart_thermostat_house_mode
+  morning_temp: input_number.smart_thermostat_morning_temp
+  sleep_temp: input_number.smart_thermostat_sleep_temp
+  evening_temp: input_number.smart_thermostat_evening_temp 
   thermostat: climate.toon_thermostat
   switch: input_boolean.smartthermostat
-addEntitys:
-  module: addEntitys
-  class: addEntitys
   dependencies:
-    - smartThermostat
-  # entitys: input_datetime.smart_thermosat_morning_on_weekend, input_datetime.smart_thermosat_evening, input_datetime.smart_thermosat_sleep, input_datetime.smart_thermosat_morning_on_week
-  # evening_on: input_datetime.smart_thermosat_evening
+    - globals
+
 set_time:
   module: set_time
   class: set_time
@@ -28,17 +22,19 @@ set_time:
   morning_on_week: input_datetime.smart_thermosat_morning_on_week
   morning_on_weekend: input_datetime.smart_thermosat_morning_on_weekend
   thermostat: climate.toon_thermostat
-  input_select: input_select.house_mode
+  input_select: input_select.smart_thermostat_house_mode
   dependencies:
-    - smart_thermostat
+    - schedule
+    - globals
+
 set_temp:
-  module: set_time
-  class: set_time
-  evening_on: input_datetime.smart_thermosat_evening
-  sleep_on: input_datetime.smart_thermosat_sleep
-  morning_on_week: input_datetime.smart_thermosat_morning_on_week
-  morning_on_weekend: input_datetime.smart_thermosat_morning_on_weekend
+  module: set_temp
+  class: set_temp
+  morning_temp: input_number.smart_thermostat_morning_temp
+  sleep_temp: input_number.smart_thermostat_sleep_temp
+  evening_temp: input_number.smart_thermostat_evening_temp 
   thermostat: climate.toon_thermostat
-  input_select: input_select.house_mode
+  input_select: input_select.smart_thermostat_house_mode
   dependencies:
-    - smart_thermostat
+    - schedule
+    - globals
