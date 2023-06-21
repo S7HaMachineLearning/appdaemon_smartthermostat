@@ -1,8 +1,8 @@
 name: Pylint & Unittest
 
 env:
-  HASS_URL: ${{ HASS_URL }}
-  HASS_TOKEN: ${{ HASS_TOKEN }}
+  HASS_URL: ${{ secrets.HASS_URL }}
+  HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
 
 on: [push]
 
