@@ -23,6 +23,7 @@ set_time:
   morning_on_weekend: input_datetime.smart_thermosat_morning_on_weekend
   thermostat: climate.toon_thermostat
   input_select: input_select.smart_thermostat_house_mode
+  smart_time_switch: input_boolean.smart_thermostat_time_switch
   dependencies:
     - schedule
     - globals
