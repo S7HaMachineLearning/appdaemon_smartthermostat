@@ -30,6 +30,8 @@ jobs:
         
   test:
     runs-on: ubuntu-latest
+    environment:
+      name: HASS
     strategy:
       matrix:
         python-version: ["3.11"]
