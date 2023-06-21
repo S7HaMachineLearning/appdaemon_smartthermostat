@@ -69,7 +69,6 @@ class schedule(hass.Hass): # pylint: disable=invalid-name
         """set evening temperature based on smart schedule"""
         self.log("Evening heat check")
         self.select_option(self.args["input_select"], "evening")
-        self.log(self.get_state(self.args["switch"]))
         if self.anyone_home() and self.get_state(self.args["switch"]) == "on":
             self.set_thermostat(self.get_state(self.args["evening_temp"]))
 
@@ -90,7 +89,7 @@ class schedule(hass.Hass): # pylint: disable=invalid-name
         if self.anyone_home() and self.get_state(self.args["switch"]) == "on":
             self.set_thermostat(self.get_state(self.args["morning_temp"]))
 
-    def presence_change(self, old, new):
+    def presence_change(self, entity, attribute, old, new, kwargs): # pylint: disable=unused-argument, too-many-arguments
         """ If noone home turn heat off, if someone home turn heat on """
         if old != new and self.get_state(self.args["switch"]) == "on":
             if self.anyone_home():
@@ -100,8 +99,7 @@ class schedule(hass.Hass): # pylint: disable=invalid-name
 
     def set_thermostat(self, attibute):
         """ Call temperature service to set thermostat to desired temperature"""	
-        self.log("Turning heat on")
-        self.log(attibute)
+        self.log(f"Setting temperature to {attibute}")
         self.entity = self.get_entity(self.args["thermostat"]) # pylint: disable=attribute-defined-outside-init
         self.entity.call_service(
             service = "set_temperature",

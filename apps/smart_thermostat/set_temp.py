@@ -13,6 +13,7 @@ class set_temp(hass.Hass): # pylint: disable=invalid-name
     evening_temp: input_number.smart_thermostat_evening_temp 
     thermostat: climate.toon_thermostat
     input_select: input_select.smart_thermostat_house_mode
+    smart_temp_switch: input_boolean.smart_thermostat_temp_switch
     """
 
     def initialize(self):
@@ -25,13 +26,14 @@ class set_temp(hass.Hass): # pylint: disable=invalid-name
 
     def check_change(self, kwargs): # pylint: disable=unused-argument
         """this function will check if the temperature has changed manualy"""
-        entity = self.get_housemode()
-        pref = float(self.get_state(entity))
-        temp = float(self.get_state(self.args['thermostat'], attribute='temperature')) # pylint: disable=E1123
-        # minimum temperature is 10 degrees
-        if temp != pref and temp >= 10:
-            self.log("change detected")
-            self.set_new_temp(entity= self.args["thermostat"], attribute = temp )
+        if self.get_state(self.args["smart_temp_switch"]) == "on":
+            entity = self.get_housemode()
+            pref = float(self.get_state(entity))
+            temp = float(self.get_state(self.args['thermostat'], attribute='temperature')) # pylint: disable=E1123
+            # minimum temperature is 10 degrees
+            if temp != pref and temp >= 10:
+                self.log("change detected")
+                self.set_new_temp(entity= self.args["thermostat"], attribute = temp )
 
     def set_new_temp(self, entity, attribute):
         """this function will set the new temperature"""
@@ -63,7 +65,7 @@ class set_temp(hass.Hass): # pylint: disable=invalid-name
 
     def get_housemode(self):
         """this function will get the temperature entity based on the housemode"""
-        mode = self.get_entity_state(self.args['input_select'])
+        mode = self.get_entity_state(entity = 'input_select')
         if mode == "morning_weekend":
             entity = self.args['morning_temp'] # pylint: disable=E1101
         if mode == "morning_week":

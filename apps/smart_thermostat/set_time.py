@@ -15,6 +15,10 @@ class set_time(hass.Hass): # pylint: disable=invalid-name
     morning_on_weekend: input_datetime.smart_thermosat_morning_on_weekend
     thermostat: climate.toon_thermostat
     input_select: input_select.smart_thermostat_house_mode
+    smart_time_switch: input_boolean.smart_thermostat_time_switch
+    morning_temp: input_number.smart_thermostat_morning_temp
+    sleep_temp: input_number.smart_thermostat_sleep_temp
+    evening_temp: input_number.smart_thermostat_evening_temp 
     """
 
     def initialize(self):
@@ -32,7 +36,7 @@ class set_time(hass.Hass): # pylint: disable=invalid-name
 
     def set_sleep_time(self, entity, attribute, old, new, kwargs): # pylint: disable=too-many-arguments, unused-argument
         """this function will set the new time"""	
-        if new == 'sleep':
+        if new == 'sleep' and self.get_state(self.args["smart_time_switch"]) == "on":
             self.log("detected manual sleep mode activated")
             new_time = self.get_new_time(self.args['sleep_on'])
             self.sleep = self.get_entity(self.args['sleep_on']) # pylint: disable=attribute-defined-outside-init
@@ -44,19 +48,40 @@ class set_time(hass.Hass): # pylint: disable=invalid-name
 
     def set_new_daytime(self, entity, attribute, old, new, kwargs): # pylint: disable=too-many-arguments, unused-argument
         """this function will set the new time"""
-        if new != old:
+        if new != old and self.get_state(self.args["smart_time_switch"]) == "on":
             time = datetime.now()
             time = time.strftime('%H:%M:%S')
             self.log("detected manual daytime mode activated")
             entity_id = self.get_housemode()
-            new_time = self.get_new_time(entity_id)
-            self.entity_id = self.get_entity(entity_id) # pylint: disable=attribute-defined-outside-init
-            self.entity_id.call_service(
-                service = "set_datetime",
-                time=new_time,
-            )
-            self.log(f"new time set to {new_time}")
+            entity = self.compaire_temp(housemode= entity_id)
+            if entity != "":
+                new_time = self.get_new_time(entity_id)
+                self.entity_id = self.get_entity(entity_id) # pylint: disable=attribute-defined-outside-init
+                self.entity_id.call_service(
+                    service = "set_datetime",
+                    time=new_time,
+                )
+                self.log(f"new time set to {new_time}")
 
+    def compaire_temp(self, housemode):
+        """this function will compaire the temperature with the housemode temperature"""
+        temperature = float(self.get_entity_state(entity='thermostat',attribute='temperature'))
+        morning_temp = float(self.get_entity_state(entity='morning_temp'))
+        sleep_temp = float(self.get_entity_state(entity='sleep_temp'))
+        evening_temp = float(self.get_entity_state(entity='evening_temp'))
+        entity = ""
+
+        if temperature == morning_temp and housemode != self.args['morning_on_week']:
+            self.log("test")
+            entity = self.args['morning_on_week']
+        if temperature == morning_temp and housemode != self.args['morning_on_weekend']:
+            entity = self.args['morning_on_weekend']
+        if temperature == sleep_temp and housemode != self.args['sleep_on']:
+            entity = self.args['sleep_on']
+        if temperature == evening_temp and housemode != self.args['evening_on']:
+            entity = self.args['evening_on']
+        self.log(entity)
+        return entity
 
     def get_housemode(self):
         """this function will get the housemode"""
@@ -90,9 +115,11 @@ class set_time(hass.Hass): # pylint: disable=invalid-name
         average_time = f'{hours:02d}:{minutes:02d}:{seconds:02d}'
         return average_time
 
-    def get_entity_state(self, entity):
+    def get_entity_state(self, entity, attribute = " "):
         """this function will get the entity state"""
-        return self.get_state(self.args[entity])
+        if attribute == " ":
+            return self.get_state(self.args[entity])
+        return self.get_state(self.args[entity], attribute=attribute) # pylint: disable=unexpected-keyword-arg
 
     def get_entity_history(self, entity, days):
         """this function will get the entity history"""

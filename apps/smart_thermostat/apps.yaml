@@ -10,7 +10,7 @@ schedule:
   sleep_temp: input_number.smart_thermostat_sleep_temp
   evening_temp: input_number.smart_thermostat_evening_temp 
   thermostat: climate.toon_thermostat
-  switch: input_boolean.smartthermostat
+  switch: input_boolean.smart_thermostat_schedule_switch
   dependencies:
     - globals
 
@@ -35,6 +35,7 @@ set_temp:
   evening_temp: input_number.smart_thermostat_evening_temp 
   thermostat: climate.toon_thermostat
   input_select: input_select.smart_thermostat_house_mode
+  smart_temp_switch: input_boolean.smart_thermostat_temp_switch
   dependencies:
     - schedule
     - globals

@@ -8,7 +8,6 @@ from apps.smart_thermostat.set_temp import set_temp
 class TestSetTemp(unittest.TestCase):
     """setup test"""
     def setUp(self):
-        print('setup')
         self.set_temp = set_temp()
         self.set_temp.get_entity_state = MagicMock(return_value='morning_weekend')
         # 3 states in history 10.0, 15.0, 16.0. 
