@@ -23,6 +23,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Create env file
+      run: |
+        echo $env:HASS_URL=$HASS_URL
     - name: Analysing the code with pylint
       run: |
         cd apps/smart_thermostat
@@ -45,8 +48,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        $env:HASS_URL=${{ secrets.HASS_URL }}
-        $env:HASS_TOKEN=${{ HASS_TOKEN }}
     - name: Run unit tests
       run: |
         python -m unittest discover -s tests/ -p "test_*.py"
