@@ -1,7 +1,7 @@
 name: Pylint & Unittest
 
 env:
-  environment: HASS
+  name: HASS
   HASS_URL: ${{ secrets.HASS_URL }}
   HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
 
