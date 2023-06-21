@@ -1,5 +1,10 @@
 name: Pylint & Unittest
 
+env:
+  name: HASS
+  HASS_URL: ${{ secrets.HASS_URL }}
+  HASS_TOKEN: ${{ secrets.HASS_TOKEN }}
+
 on: [push]
 
 jobs:
@@ -18,6 +23,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Create env file
+      run: |
+        echo $env:HASS_URL=$HASS_URL
     - name: Analysing the code with pylint
       run: |
         cd apps/smart_thermostat
@@ -25,6 +33,8 @@ jobs:
         
   test:
     runs-on: ubuntu-latest
+    environment:
+      name: HASS
     strategy:
       matrix:
         python-version: ["3.11"]
